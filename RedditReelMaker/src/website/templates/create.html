@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+   
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}?v={{ timestamp }}">
+</head>
+<body>
+
+    <img id="slideshow" src="{{ url_for('static', filename='images/display_init/image1.png') }}" alt="Slideshow" >
+    <div class="blur-overlay"></div>
+
+    <div class = "complete_form">
+        <p class = "main_title">Let's get you <i>started!</i></p>
+        <br>
+        <form method="POST">
+
+            <p class="subtitle">Video Title:</p>
+            
+            <input type="text" class="video_name" placeholder="Enter video title">
+            <br><br>
+            <div class="bar-container">
+                <div class="bar"></div>
+            </div>
+            
+            <p class="subtitle">Video Length:</p>
+            <div class="bar-container">
+                <div class="bar"></div>
+            </div>
+            <br>
+
+            <input type="radio" id="option1" name="choice" value="Option 1">
+            <label for="option1">20-30 Seconds</label><br>
+
+            <input type="radio" id="option2" name="choice" value="Option 2">
+            <label for="option2">40-50 Seconds</label><br>
+
+            <input type="radio" id="option3" name="choice" value="Option 3">
+            <label for="option3">60-80 Seconds</label><br>
+        </form>    
+    </div>
+
+    
+    <script>
+        const images = [
+            "{{ url_for('static', filename='images/display_init/image1.png') }}",
+            "{{ url_for('static', filename='images/display_init/image2.jpg') }}",
+            "{{ url_for('static', filename='images/display_init/image3.jpg') }}",
+            "{{ url_for('static', filename='images/display_init/image4.jpg') }}"
+        ];
+
+        const slideshow = document.getElementById("slideshow");
+        
+        let index = 0;
+        const fadeDuration = 500; // .5 second fade
+        const minInterval = 5000;
+        const maxInterval = 10000;
+
+        function getRandomFloat(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        function changeImage() {
+            slideshow.style.opacity = 0;
+
+            setTimeout(() => {
+                index = (index + 1) % images.length;
+                slideshow.src = images[index];
+
+                slideshow.style.opacity = 1;
+            }, fadeDuration);
+            setTimeout(changeImage, getRandomFloat(minInterval, maxInterval));
+        }
+        
+        setTimeout(changeImage, getRandomFloat(minInterval, maxInterval));
+    </script>
+
+</body>
+</html>
