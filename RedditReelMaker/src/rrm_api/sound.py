@@ -1,9 +1,18 @@
 import edge_tts
 import asyncio
-import os
+from pydub import AudioSegment
+from pydub.effects import speedup
 
 class Sound:
     def __init__(self, content, output_file="output.mp3"):
+    
+        self.content = [c.replace(".", "").replace(",", "") for c in content]
+        if isinstance(content, list):
+            self.content = [c.replace(".", "").replace(",", "") for c in content]
+        else:
+            self.content = content.replace(".", "").replace(",", "")
+
+        print(content)
 
         self.content = content
         self.output_file = output_file
@@ -13,31 +22,29 @@ class Sound:
         return self.output_file
 
     async def _speak(self):
-
-        # save male part
+        # generate male TTS
         male_file = "male_part.mp3"
         male_tts = edge_tts.Communicate(self.content[0], voice="en-US-GuyNeural")
         await male_tts.save(male_file)
 
-        # save female part
+        # generate female TTS
         female_file = "female_part.mp3"
         female_tts = edge_tts.Communicate(self.content[1], voice="en-US-AriaNeural")
         await female_tts.save(female_file)
 
-        # merge safely
-        for filename in [male_file, female_file]:
-            if not os.path.exists(filename):
-                raise FileNotFoundError(f"{filename} was not created!")
+        male_audio = AudioSegment.from_file(male_file)
+        female_audio = AudioSegment.from_file(female_file)
 
-        with open(self.output_file, "wb") as out:
-            # write male part
-            with open(male_file, "rb") as m:
-                out.write(m.read())
-            # write female part
-            with open(female_file, "rb") as f:
-                out.write(f.read())
+        male_audio = speedup(male_audio,1.1)
+        female_audio = speedup(female_audio,1.25)
 
-        # remove temporary files
+        # Concatenate without gaps
+        combined = male_audio + female_audio
+
+        combined.export(self.output_file, format="mp3")
+
+        # Clean up
+        import os
         os.remove(male_file)
         os.remove(female_file)
 
