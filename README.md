@@ -13,7 +13,7 @@ reel maker bot
   - [ ] Background music toggle <br>
 
 - [ ] Video Generation
-  - [ ] Add subtitles for videos <br>
+  - [X] Add subtitles for videos <br>
   - [ ] Add background music  <br>
   - [ ] Add more background vidoes 
 - [ ] Make a frontend <br>
