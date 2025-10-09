@@ -8,12 +8,13 @@ reel maker bot
 - [X] Video generation with moviepy <br>
 
 - [ ] Filtering <br>
-  - [ ] Title lenght filter <br>
   - [ ] NSFW Filter <br>
   - [ ] Background music toggle <br>
 
 - [ ] Video Generation
   - [X] Add subtitles for videos <br>
   - [ ] Add background music  <br>
-  - [ ] Add more background vidoes 
+  - [X] Add more background videos 
 - [ ] Make a frontend <br>
+  - [ ] Complete create page
+  - [ ] Complete register page 
