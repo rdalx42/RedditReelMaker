@@ -1,19 +1,46 @@
-
 from flask import Flask, render_template, request, url_for, redirect
 import time
+
+from rrm_api.rrm import Api
+from rrm_api.sound import Sound
+from rrm_api.video import  Video
 
 app = Flask(__name__)
 
 @app.route("/")
-
 def home():
-    # temporary.
+    #placeholder
     return redirect(url_for("create"))
 
-@app.route("/create",methods=["GET","POST"])
-
+@app.route("/create", methods=["GET", "POST"])
 def create():
-    return render_template("create.html",timestamp=int(time.time()))
+    err_msg = None
+
+    if request.method == "POST":
+        if "generate" in request.form:
+            can_call_api = True
+            post_data = {}
+
+            for key, value in request.form.items():
+                if key != "generate" and (value is None or value.strip() == ""):
+                    can_call_api = False
+                    break
+                post_data[key] = value
+
+            post_data["flag_choice_nsfw"] = request.form.get("flag_choice_nsfw")
+            post_data["flag_choice_subtitles"] = request.form.get("flag_choice_subtitles")
+
+            if can_call_api:
+                
+                return redirect(url_for("loading"))
+            else:
+                err_msg = "Expected all content to be filled!"
+
+    return render_template("create.html", timestamp=int(time.time()), error_msg=err_msg)
+
+@app.route("/loading")
+def loading():
+    return render_template("loading.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
