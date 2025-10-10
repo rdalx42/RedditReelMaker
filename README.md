@@ -14,11 +14,12 @@ https://github.com/user-attachments/assets/8cc4e311-c03a-4510-b2eb-578dec5163c6
 - [ ] Filtering <br>
   - [X] NSFW Filter <br>
   - [ ] Background music toggle <br>
-  - [ ] Subtitle toggle <br>
+  - [ ] *Cool* Subtitle toggle <br>
 - [ ] Video Generation
   - [X] Add subtitles for videos <br>
   - [ ] Add background music  <br>
-  - [X] Add more background videos 
-- [ ] Make a frontend <br>
+  - [X] Add more background videos
+  - [X] More scraping  
+- [ ] Make a frontend (with flask) <br>
   - [X] Complete create page
   - [ ] Complete register page 
