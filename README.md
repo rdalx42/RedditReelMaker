@@ -16,6 +16,7 @@ https://github.com/user-attachments/assets/8cc4e311-c03a-4510-b2eb-578dec5163c6
   - [ ] Background music toggle <br>
   - [ ] *Cool* Subtitle toggle <br>
 - [ ] Video Generation
+  - [ ] Clip frames at 3-7 seconds (adjustable by the user) 
   - [X] Add subtitles for videos <br>
   - [ ] Add background music  <br>
   - [X] Add more background videos
