@@ -2,6 +2,10 @@
 
 reel maker bot
 
+Current state of output:
+
+https://github.com/user-attachments/assets/8cc4e311-c03a-4510-b2eb-578dec5163c6
+
 # To-Do:
 
 - [X] Audio Part <br>
@@ -16,5 +20,5 @@ reel maker bot
   - [ ] Add background music  <br>
   - [X] Add more background videos 
 - [ ] Make a frontend <br>
-  - [ ] Complete create page
+  - [X] Complete create page
   - [ ] Complete register page 
