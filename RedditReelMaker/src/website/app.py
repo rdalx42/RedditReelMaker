@@ -1,9 +1,14 @@
-from flask import Flask, render_template, request, url_for, redirect
-import time
 
-from rrm_api.rrm import Api
-from rrm_api.sound import Sound
-from rrm_api.video import  Video
+
+from flask import Flask, render_template, request, url_for, redirect
+
+from rrm_api import Api, Sound, Video
+
+# from rrm_api.rrm import Api
+# from rrm_api.sound import Sound
+# from rrm_api.video import  Video
+
+import time
 
 app = Flask(__name__)
 
@@ -31,7 +36,11 @@ def create():
             post_data["flag_choice_subtitles"] = request.form.get("flag_choice_subtitles")
 
             if can_call_api:
-                
+                if post_data["flag_choice_nsfw"]!=None:
+                    pass # change algo calling
+
+                if post_data["flag_choice_subtitles"]!=None:
+                    pass # change subtite algo calling
                 return redirect(url_for("loading"))
             else:
                 err_msg = "Expected all content to be filled!"
