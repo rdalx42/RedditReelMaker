@@ -60,8 +60,107 @@ input[type="radio"]:checked::after {
     transform: scale(0);
     transition: transform 0.2s ease;
 }
+.title {
+    position: fixed;             
+    top: 0;                        /* stick to the very top */
+    left: 10%;                   
+    transform: translateX(-10%);  
+    color: white;
+    font-size: clamp(1.5rem, 5vw, 2rem); /* scales with screen size */
+    font-weight: bold;
+    z-index: 10;
+    background-color: rgba(24,24,24,0.50);
+    border-radius: 10px 10px 10px 10px;
+    padding: clamp(5px, 1.5vh, 12px) clamp(10px, 3vw, 25px); /* responsive padding */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5); /* subtle shadow for readability */
+}
+
+.title2 {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    margin-top:100px;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 1.5rem;
+    color: white;
+    padding: 10px;
+    background-color: rgba(0,0,0,0.6); /* optional background */
+    border-radius: 8px;               /* optional */
+    z-index: 100;
+}
+
+
+/* Optional: add a top margin to the content below so it’s not hidden */
+.complete_form {
+    margin-top: clamp(20px, 10vh, 30px); /* space below the title */
+}
+
+.generate {
+    position: relative;       
+    display: block;           
+    margin: 20px auto 0 auto; 
+    width: 70%;
+    max-width: 200px;
+    height: 40px;
+    outline: none;
+    background-color: #ffffff; /* initial white background */
+    color: #000;               /* initial black text */
+    border: 2px solid #000;    /* optional border for better contrast */
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 10;
+    transition: all 0.3s ease-in-out; /* smooth color & background transition */
+}
+
+/* Hover: fill black, text white */
+.generate:hover {
+    background-color: #000;
+    color: #ffffff;
+    transform: scale(1.05); /* optional pop effect */
+}
+
+/* Active: pressed effect */
+.generate:active {
+    transform: scale(0.95); /* button compress on click */
+}
 
 input[type="radio"]:checked::after {
+    transform: scale(1); /* scale up when checked */
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.3s ease, transform 0.2s ease;
+}
+
+input[type="checkbox"]:hover {
+    transform: scale(1.1); /* subtle grow effect on hover */
+}
+
+input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #ffffff;
+    top: 3px;
+    left: 3px;
+    border-radius: 2px;
+    transform: scale(0);
+    transition: transform 0.2s ease;
+}
+
+input[type="checkbox"]:checked::after {
     transform: scale(1); /* scale up when checked */
 }
 
@@ -69,8 +168,27 @@ input[type="radio"]:checked::after {
     font-size: larger;
 }
 
+
+.error-message {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff4d4d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    z-index: 100;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+
+
 .video_name {
+    resize: none;
     background-color: rgba(77, 77, 77, 0.9);
+    font-family: Arial, Helvetica, sans-serif;
     color: white;       /* added missing semicolon */
     outline: none;      /* removes the focus outline */
     border: none;       /* optional: remove default border */
@@ -79,6 +197,7 @@ input[type="radio"]:checked::after {
     width: 90%;
     font-size: large;
     height: 30px;
+    
 }
 
 .video_name:focus {
@@ -88,6 +207,7 @@ input[type="radio"]:checked::after {
 
 .bar-container {
     width: 160%;
+    max-width: 300px;  
     height: 10px;
     background-color: #333;
     border-radius: 10px;
@@ -107,12 +227,12 @@ input[type="radio"]:checked::after {
     transition: width 0.5s ease-in-out; /* smooth scaling */
 }
 .complete_form {
-    position: fixed;              
-    top: 50%;
+    position: fixed;      
+    top: 50%;           /* keep roughly centered */
     left: 50%;
-    transform: translate(-50%, -50%); 
+    transform: translate(-50%, -50%);
     width: 80vw;                  
-    height: 80vh;
+    max-height: 80vh;        /* maximum height relative to viewport */
     border-radius: 20px;                 
     background-color: rgba(24,24,24,0.95);
     color: white;
@@ -120,25 +240,12 @@ input[type="radio"]:checked::after {
     font-size: 2rem;              
     z-index: 3;
     display: flex;                
-    justify-content: center;
+    flex-direction: column;      /* stack content vertically */
+    justify-content: flex-start; /* align content to top */
     align-items: center;
-}
-
-.main_title em {
-    font-style: italic;
-    color: #ffcc00; /* optional: make it stand out */
-}
-
-.main_title {
-    position: fixed;
-    top: 20px;              /* distance from the top */
-    left: 50%;              /* center horizontally */
-    transform: translateX(-50%);  /* shift back by 50% of its own width */
-    z-index: 4;             /* above blur and form */
-    color: white;
-    font-size: 2.5rem;      /* adjust as needed */
-    text-align: center;
-    font-weight: bold;
+    overflow-y: auto;       
+    overflow-x: hidden;
+    padding: 20px;             /* space around content */
 }
 
 
