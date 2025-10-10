@@ -12,9 +12,9 @@ https://github.com/user-attachments/assets/8cc4e311-c03a-4510-b2eb-578dec5163c6
 - [X] Video generation with moviepy <br>
 
 - [ ] Filtering <br>
-  - [ ] NSFW Filter <br>
+  - [X] NSFW Filter <br>
   - [ ] Background music toggle <br>
-
+  - [ ] Subtitle toggle <br>
 - [ ] Video Generation
   - [X] Add subtitles for videos <br>
   - [ ] Add background music  <br>
