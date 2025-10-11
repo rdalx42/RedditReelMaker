@@ -28,7 +28,7 @@
            
             <p class="subtitle">Video Title📝</p>
             
-            <textarea type="text" class="video_name" placeholder="Enter video title" name = "vid_name"></textarea>
+            <textarea type="text" class="video_name" placeholder="Enter video title (only characters and numbers allowed, no spaces)" name = "vid_name"></textarea>
             <br><br>
             <div class="bar-container">
                 <div class="bar"></div>
@@ -41,13 +41,13 @@
             <br>
 
             <input type="radio" id="option1" name="len_choice" value="Option 1">
-            <label for="option1">20-30 Seconds🏃‍♀️</label><br>
+            <label for="option1">15-20 Seconds🏃‍♀️</label><br>
 
             <input type="radio" id="option2" name="len_choice" value="Option 2" checked>
-            <label for="option2">40-50 Seconds🚶</label><br>
+            <label for="option2">20-30 Seconds🚶</label><br> <!--70,100-->
 
             <input type="radio" id="option3" name="len_choice" value="Option 3">
-            <label for="option3">60-80 Seconds🕴</label><br>
+            <label for="option3">50-80 Seconds🕴</label><br>
 
             <br>
             
@@ -57,7 +57,7 @@
             <p class="subtitle">Video Generation Flags 🚩</p>
             
             <input type="checkbox" id="option4" name="flag_choice_nsfw" value="Option 4">
-            <label for="option4">18+ Content🔞</label><br>
+            <label for="option4">Allow Possible 18+ Content Generation🔞</label><br>
             
             <br>
 
@@ -70,14 +70,27 @@
                 <div class="bar"></div>
             </div>
 
-            <p class="subtitle">Background Gameplay 🎮</p>
+            <p class="subtitle">Background Video 📹</p>
 
+            <input type="radio" id="option8" name="gameplay_choice" value="Option 8">
+            <label for="option6">ASMR Cooking🧑‍🍳</label><br>
 
             <input type="radio" id="option6" name="gameplay_choice" value="Option 6">
             <label for="option6">Minecraft Parkour⛏️</label><br>
 
             <input type="radio" id="option7" name="gameplay_choice" value="Option 7" checked>
             <label for="option7">Subway Surfers🚊</label><br>
+            <br>
+
+            <p class="subtitle">Background Video Frame Change Rate🎬</p>
+            <input type="radio" id="option9" name="clip_choice" value="Option 9">
+            <label for="option6">3 Seconds</label><br>
+
+            <input type="radio" id="option10" name="clip_choice" value="Option 10">
+            <label for="option6">5 Seconds</label><br>
+
+            <input type="radio" id="option11" name="clip_choice" value="Option 11" checked>
+            <label for="option7">8 Seconds</label><br>
             <br>
             <div class="bar-container">
                 <div class="bar"></div>
