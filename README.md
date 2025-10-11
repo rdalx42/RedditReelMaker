@@ -26,6 +26,7 @@ https://github.com/user-attachments/assets/8cc4e311-c03a-4510-b2eb-578dec5163c6
   - [ ] Api Integration 
     - [X] Output generation
     - [ ] Download via browser
+    - [ ] Api Status tracker
        
 - [ ] Todo's for solving
   - [X] Fix the bad api initialization in website/app.py  
