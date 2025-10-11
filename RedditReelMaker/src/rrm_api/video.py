@@ -6,68 +6,38 @@ import numpy as np
 from math import sin, pi
 
 class Video:
-    def __init__(self, mp3, video_path="res/parkour.mp4",cool_subtitles=False,export_name="output",background_video_change_frame_rate = 8):
+    def __init__(self, mp3, video_path="res/parkour.mp4", cool_subtitles=False, export_name="output", background_video_change_frame_rate=8):
         self.mp3 = mp3
         self.background_video_frame_change_rate = background_video_change_frame_rate
         self.export_name = export_name
         self.video_path = video_path
         self.model = whisper.load_model("small")  
-        if cool_subtitles==True:
+        if cool_subtitles:
             self.fontcolors = ["white","blue","yellow","red","green","purple","orange"]
         else:
-            self.fontcolors=["white"]
+            self.fontcolors = ["white"]
+
     def generate_subtitles(self):
         result = self.model.transcribe(self.mp3, word_timestamps=True)
         subtitles = []
 
-        delay_map = {
-            ".": 0.0,
-            "?": 0.0,
-            "!": 0.0,
-            ",": 0.0,
-            ";": 0.0,
-            ":": 0.0,
-            "...": 0.0
-        }
-
         for seg in result.get("segments", []):
             if "words" in seg:
                 for w in seg["words"]:
-                    word = w["word"].strip()
-                    start = w["start"]
-                    end = w["end"]
-
-                    extra_delay = 0.0
-                    for mark, delay in delay_map.items():
-                        if word.endswith(mark):
-                            extra_delay = delay
-                            break
-
-                    
                     subtitles.append({
-                        "start": start,
-                        "end": end + extra_delay,
-                        "text": word
+                        "start": w["start"],
+                        "end": w["end"],
+                        "text": w["word"].strip()
                     })
             else:
-                text = seg["text"].strip()
-                start = seg["start"]
-                end = seg["end"]
-
-                extra_delay = 0.0
-                for mark, delay in delay_map.items():
-                    if text.endswith(mark):
-                        extra_delay = delay
-                        break
-
                 subtitles.append({
-                    "start": start,
-                    "end": end + extra_delay,
-                    "text": text
+                    "start": seg["start"],
+                    "end": seg["end"],
+                    "text": seg["text"].strip()
                 })
 
-        return subtitles 
-    
+        return subtitles
+
     def create_subtitle_clip(self, text, start, end, video_width, font_path=None):
         if not font_path:
             font_path = "res/Roboto.ttf"
@@ -93,31 +63,25 @@ class Video:
         clip = ImageClip(img_array, transparent=True).set_start(start).set_end(end)
 
         # Bounce effect
-        amplitude = 20  # max pixels to move
-        frequency = 2   # number of bounces per second
+        amplitude = 20
+        frequency = 2
         clip = clip.set_position(lambda t: ("center", 900 - amplitude * abs(sin(pi * frequency * t))))
 
         return clip
 
     def do(self, output_file=None):
-        """
-        Creates a video with subtitles and switches video frames every few seconds.
-        
-        switch_interval: seconds per random video frame
-        """
         print("Making video...")
         audio = AudioFileClip(self.mp3)
         video_full = VideoFileClip(self.video_path, target_resolution=(1080, 1920))
         video_duration = video_full.duration
         audio_duration = audio.duration
-        
+
         if audio_duration > video_duration:
             print("Audio is longer than video. Exiting.")
             audio.close()
             video_full.close()
             return None
 
-        # Calculate how many switches we need
         num_switches = int(np.ceil(audio_duration / self.background_video_frame_change_rate))
         subclips = []
 
@@ -133,30 +97,19 @@ class Video:
             subclip = subclip.set_start(i * self.background_video_frame_change_rate)
             subclips.append(subclip)
 
-        # Combine the random subclips into one video
         clip = CompositeVideoClip(subclips).set_duration(audio_duration)
         clip = clip.set_audio(audio)
 
-        # Add subtitles
         subtitles = self.generate_subtitles()
-        subtitle_clips = []
-        for sub in subtitles:
-            subtitle_clips.append(
-                self.create_subtitle_clip(
-                    text=sub["text"],
-                    start=sub["start"],
-                    end=sub["end"],
-                    video_width=clip.w
-                )
-            )
+        subtitle_clips = [self.create_subtitle_clip(sub["text"], sub["start"], sub["end"], clip.w) for sub in subtitles]
 
         final_clip = CompositeVideoClip([clip, *subtitle_clips])
-        
+
         if not output_file:
             output_file = f"{self.export_name}.mp4"
-        
+
         final_clip.write_videofile(output_file, codec="libx264", audio_codec="aac", fps=24)
-        
+
         final_clip.close()
         clip.close()
         video_full.close()
