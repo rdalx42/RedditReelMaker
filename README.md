@@ -3,11 +3,13 @@
 reel maker bot
 
 Current state of output:
+
 https://github.com/user-attachments/assets/8cc4e311-c03a-4510-b2eb-578dec5163c6
 
 <br>
 
 Current state of frontend:
+
 https://github.com/user-attachments/assets/4ddbc0a0-99bd-4e77-b460-b148df205f57
 
 <br>
