@@ -26,13 +26,12 @@ class Api:
         return None
 
     def sanitize_comment(self, comment):
-        for char in comment:
-            if char == '.' or char == ',':
-                comment.remove(char)
-
-        return comment
+        if isinstance(comment, list):
+            return [c.replace(".", "").replace(",", "") for c in comment]
+        else:
+            return comment.replace(".", "").replace(",", "")
     def get_posts(self):
-        print("getting")
+        
         after = None
 
         while len(self.ans)<self.total_limit:
@@ -72,13 +71,15 @@ class Api:
             after = data["data"]["after"]
             time.sleep(1)
 
+        
+
     def save_ans(self):
         with open("ans.json", "w", encoding="utf-8") as f:
             json.dump(self.ans, f, ensure_ascii=False, indent=4)
 
         self.ans=[] # empty list
 
-    def get_post(self, word_count_min, word_count_max):
+    def get_post(self, word_count_min, word_count_max,nsfw=False):
 
         with open("ans.json", "r", encoding="utf-8") as f:
             posts = json.load(f)
@@ -88,6 +89,11 @@ class Api:
 
         while attempts < max_attempts:
             selected_post = random.choice(posts)
+            
+            if selected_post["body"]["nsfw"]==True and nsfw==False:
+                attempts+=1
+                continue
+            
             pid = selected_post["body"]["id"]
             pname = selected_post["body"]["title"]
             pcomment = self.get_first_comment(pid)
@@ -98,11 +104,13 @@ class Api:
 
             word_count = len(pcomment.split())
             if word_count_min <= word_count <= word_count_max:
+                [pname, pcomment] = self.sanitize_comment([pname, pcomment])
                 return [pname, pcomment]
 
             attempts += 1
 
         # fallback if no comment found
+        print("Error; Couldn't find any comment")
         return None
 
     def output(self):
