@@ -1,6 +1,6 @@
 # RedditReelMaker
 
-reel maker bot
+>> Still work in progress
 
 Current state of output:
 
