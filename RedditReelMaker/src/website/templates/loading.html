@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-   
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}?v={{ timestamp }}">
+    <meta http-equiv="refresh" content="5">  <!-- auto refresh every 5 seconds -->
 </head>
 <body>
 
-    <img id="slideshow" src="{{ url_for('static', filename='images/display_init/image1.png') }}" alt="Slideshow" >
+    <img id="slideshow" src="{{ url_for('static', filename='images/display_init/image1.png') }}" alt="Slideshow">
     <div class="blur-overlay"></div>
 
-    <p class = "title2">
-        Loading⏱️
-        <br><br>
-        Might take around 1-3 minutes🍿
-        <br><br>
-        Please dont refresh or close this page until loading not completed
-
+    <p class="title2">
+        Loading⏱️<br><br>
+        Might take around 1–3 minutes 🍿<br><br>
+        Please don't refresh or close this page manually.<br><br>
+        <strong>Status:</strong> {{ message }}
     </p>
-    <script href = "../static/code/slideshow.js"></script>
+
+    <script src="{{ url_for('static', filename='code/slideshow.js') }}"></script>
 </body>
 </html>
