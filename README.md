@@ -29,12 +29,13 @@ https://github.com/user-attachments/assets/4ddbc0a0-99bd-4e77-b460-b148df205f57
   - [X] Add subtitles for videos <br>
   - [X] Add background music  <br>
   - [X] Add more background videos
-  - [X] More scraping
-  - [ ] Fix extra robotic text-to-speech   
+  - [ ] More scraping
+  - [X] Fix extra robotic text-to-speech   
 - [ ] Make a frontend (with flask) <br>
   - [X] Complete create page
   - [X] Complete loading page
   - [ ] Complete register page
+  - [ ] Premium membership
   - [X] Add Home page
   - [X] Api Integration 
     - [X] Output generation
