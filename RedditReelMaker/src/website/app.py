@@ -23,6 +23,7 @@ def call_api_worker(task_id, params):
         export_filename = "ONLINE_REEL_MAKER_OUTPUT"
         gameplay_path = ""
         change = 0
+        bg_voice="en-US-GuyNeural"
         l1 = 0
         l2 = 0
 
@@ -57,12 +58,18 @@ def call_api_worker(task_id, params):
                 elif value == "Option 3":
                     l1, l2 = 140, 210
 
+            if key == "voice_choice":
+                if value == "Option 12":
+                    bg_voice="en-US-AriaNeural"
+                else:
+                    bg_voice="en-US-GuyNeural"
+
+
         tasks[task_id]["message"] = "Fetching Reddit post..."
         api = Api(l1, l2, "AskReddit", ans_path="C:/Users/raduh/OneDrive/Documents/RedditReelMaker/src/ans.json")
         selected = api.get_post(l1, l2, nsfw=nsfw)
         tasks[task_id]["message"] = "Generating voiceover..."
-        api.sanitize_comment(selected)
-        audio_path = Sound(selected).do()
+        audio_path = Sound(selected,voice=bg_voice).do()
 
         rand_str = f'{random.getrandbits(128):032x}'
         export_filename += rand_str
@@ -71,16 +78,17 @@ def call_api_worker(task_id, params):
         video = Video(
             audio_path,
             cool_subtitles=coolsubs,
+            tasks=tasks,
+            taskkey=task_id,
             video_path=gameplay_path,
             bg_music=bg_music,
             export_name=export_filename,
             background_video_change_frame_rate=change
         )
-        tasks[task_id]["message"] = "Downloading will begin shortly (1-3 minutes)"
+        
         output_file = video.do()
         tasks[task_id]["status"] = "done"
         tasks[task_id]["file"] = output_file
-        tasks[task_id]["message"] = "Video generated successfully ✅"
     except Exception as e:
         traceback.print_exc()
         tasks[task_id]["status"] = "error"
