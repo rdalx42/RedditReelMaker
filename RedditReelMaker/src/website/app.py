@@ -19,6 +19,7 @@ def call_api_worker(task_id, params):
 
         nsfw = False
         coolsubs = False
+        bg_music=False
         export_filename = "ONLINE_REEL_MAKER_OUTPUT"
         gameplay_path = ""
         change = 0
@@ -30,6 +31,8 @@ def call_api_worker(task_id, params):
                 nsfw = True
             if key == "flag_choice_subtitles" and value:
                 coolsubs = True
+            if key == "flag_choice_bg_music" and value:
+                bg_music=True
             if key == "vid_name":
                 export_filename = value
             if key == "gameplay_choice":
@@ -69,6 +72,7 @@ def call_api_worker(task_id, params):
             audio_path,
             cool_subtitles=coolsubs,
             video_path=gameplay_path,
+            bg_music=bg_music,
             export_name=export_filename,
             background_video_change_frame_rate=change
         )
