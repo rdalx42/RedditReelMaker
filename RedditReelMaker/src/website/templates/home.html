@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}?v={{ timestamp }}">
+    </head>
+    <body>
+        
+        <img id="slideshow" src="{{ url_for('static', filename='images/display_init/image1.png') }}" alt="Slideshow" >
+        <div class="blur-overlay"></div>
+        <p class = "title">Home</p>
+        <br>
+
+        <div class="hero_page">
+            <video class="hero_video" muted autoplay loop>
+                <source src="{{ url_for('static', filename='showcase.mp4') }}" type="video/mp4">
+            </video>
+            
+        
+            <div class="hero_info_box">
+                <form method="POST">
+                    <h2>Create <i>Viral</i> Reels With Just Some <i>Clicks!</i></h2>
+                    <br>
+                    <h3>
+                        Online Reel Maker Allows you to create 
+                        reddit story like reels quickly that have 
+                        potential of going viral for free! 
+
+                    </h3>
+
+                    <button class = "continue_button" name = "continue_in_app">Continue</button>
+
+                    <br><br>
+
+                    <button class = "continue_button" name = "register">Register</button> <!--Not implemented yet-->
+                </form>
+            </div>
+        </div>
+
+        <script>
+            const images = [
+                "{{ url_for('static', filename='images/display_init/image1.png') }}",
+                "{{ url_for('static', filename='images/display_init/image2.jpg') }}",
+                "{{ url_for('static', filename='images/display_init/image3.jpg') }}",
+                "{{ url_for('static', filename='images/display_init/image4.jpg') }}",
+                "{{ url_for('static', filename='images/display_init/image5.jpg') }}",
+                "{{ url_for('static', filename='images/display_init/image6.jpg') }}",
+                "{{ url_for('static', filename='images/display_init/image7.jpg') }}"
+            ];
+        </script>
+        
+        <script src="{{ url_for('static', filename='code/slideshow.js') }}"></script>
+    </body>
+</html>
