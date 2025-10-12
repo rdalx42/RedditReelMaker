@@ -35,7 +35,7 @@ https://github.com/user-attachments/assets/4ddbc0a0-99bd-4e77-b460-b148df205f57
   - [X] Complete create page
   - [X] Complete loading page
   - [ ] Complete register page
-  - [ ] Add Home page
+  - [X] Add Home page
   - [X] Api Integration 
     - [X] Output generation
     - [X] Download via browser
