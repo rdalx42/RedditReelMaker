@@ -17,15 +17,15 @@ https://github.com/user-attachments/assets/4ddbc0a0-99bd-4e77-b460-b148df205f57
 
 # To-Do:
 
-- [ ] Filtering <br>
+- [X] Filtering <br>
   - [X] NSFW Filter <br>
-  - [ ] Background music toggle <br>
+  - [X] Background music toggle <br>
   - [X] *Cool* Subtitle toggle <br>
   - [X] Lenght toggling
-- [ ] Video Generation
+- [X] Video Generation
   - [X] Clip frames at 3-7 seconds (adjustable by the user) 
   - [X] Add subtitles for videos <br>
-  - [ ] Add background music  <br>
+  - [X] Add background music  <br>
   - [X] Add more background videos
   - [X] More scraping
   - [ ] Fix extra robotic text-to-speech   
