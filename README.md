@@ -33,10 +33,10 @@ https://github.com/user-attachments/assets/4ddbc0a0-99bd-4e77-b460-b148df205f57
   - [X] Complete create page
   - [X] Complete loading page
   - [ ] Complete register page
-  - [ ] Api Integration 
+  - [X] Api Integration 
     - [X] Output generation
-    - [ ] Download via browser
-    - [ ] Api Status tracker
+    - [X] Download via browser
+    - [X] Api Status tracker
        
 - [ ] Todo's for solving
-  - [X] Fix the bad api initialization in website/app.py  
+  - [ ] Fix the bad api initialization in website/app.py  
