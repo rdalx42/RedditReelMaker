@@ -6,8 +6,10 @@ import numpy as np
 from math import sin, pi
 
 class Video:
-    def __init__(self, mp3, video_path="res/parkour.mp4", cool_subtitles=False, export_name="output", background_video_change_frame_rate=8,bg_music=False):
+    def __init__(self, mp3, video_path="res/parkour.mp4", cool_subtitles=False, export_name="output", background_video_change_frame_rate=8,bg_music=False,taskkey=None,tasks=None):
         self.mp3 = mp3
+        self.task_key=taskkey
+        self.tasks=tasks
         self.background_music = bg_music
         self.background_video_frame_change_rate = background_video_change_frame_rate
         self.export_name = export_name
@@ -21,6 +23,7 @@ class Video:
     def generate_subtitles(self):
         result = self.model.transcribe(self.mp3, word_timestamps=True)
         subtitles = []
+        self.tasks[self.task_key]["message"]="Making subtitles..."
 
         for seg in result.get("segments", []):
             if "words" in seg:
@@ -40,6 +43,7 @@ class Video:
         return subtitles
 
     def create_subtitle_clip(self, text, start, end, video_width, font_path=None):
+        self.tasks[self.task_key]["message"]="Addin subtitles to video..."
         if not font_path:
             font_path = "res/Roboto.ttf"
         font_size = 80
@@ -71,7 +75,7 @@ class Video:
         return clip
 
     def do(self, output_file=None):
-        print("Making video...")
+        self.tasks[self.task_key]["message"]="Making the video..."
         audio = AudioFileClip(self.mp3)
         video_full = VideoFileClip(self.video_path, target_resolution=(1080, 1920))
         video_duration = video_full.duration
@@ -86,7 +90,8 @@ class Video:
         # Background video clips
         num_switches = int(np.ceil(audio_duration / self.background_video_frame_change_rate))
         subclips = []
-
+        self.tasks[self.task_key]["message"]="Scaling the video..."
+        
         for i in range(num_switches):
             start_time = random.uniform(0, video_duration - self.background_video_frame_change_rate)
             end_time = start_time + self.background_video_frame_change_rate
@@ -98,13 +103,14 @@ class Video:
             ).resize((1080, 1920))
             subclip = subclip.set_start(i * self.background_video_frame_change_rate)
             subclips.append(subclip)
-
+        
         clip = CompositeVideoClip(subclips).set_duration(audio_duration)
 
         final_audio = audio
         if self.background_music==True:
             bg_music = AudioFileClip("res/bgmusic.mp3").subclip(0, audio_duration)
             final_audio = CompositeAudioClip([audio, bg_music.volumex(0.1)])
+            self.tasks[self.task_key]["message"]="Adding background music!"
 
         clip = clip.set_audio(final_audio)
 
@@ -117,7 +123,8 @@ class Video:
         if not output_file:
             output_file = f"{self.export_name}.mp4"
 
-        final_clip.write_videofile(output_file, codec="libx264", audio_codec="aac", fps=24)
+        self.tasks[self.task_key]["message"]="Writing video file (Takes some time)..."
+        final_clip.write_videofile(output_file, codec="libx264", audio_codec="aac", fps=24,threads=3,)
 
         # Close all resources
         final_clip.close()
@@ -128,6 +135,7 @@ class Video:
             bg_music.close()
 
         print(f"Saved video to {output_file}")
+        self.tasks[self.task_key]["message"]="Downloaded video file!"
         return output_file
 
 
