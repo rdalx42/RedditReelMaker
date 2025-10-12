@@ -5,7 +5,9 @@
 
 Current state of output:
 
-https://github.com/user-attachments/assets/8cc4e311-c03a-4510-b2eb-578dec5163c6
+
+https://github.com/user-attachments/assets/670e51b8-0292-47fe-8512-fcf3e365fe75
+
 
 <br>
 
