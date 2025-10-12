@@ -1,4 +1,4 @@
-from moviepy.editor import AudioFileClip, VideoFileClip, CompositeVideoClip, ImageClip
+from moviepy.editor import AudioFileClip, VideoFileClip, CompositeVideoClip, ImageClip, CompositeAudioClip
 from PIL import Image, ImageDraw, ImageFont
 import random
 import whisper
@@ -6,8 +6,9 @@ import numpy as np
 from math import sin, pi
 
 class Video:
-    def __init__(self, mp3, video_path="res/parkour.mp4", cool_subtitles=False, export_name="output", background_video_change_frame_rate=8):
+    def __init__(self, mp3, video_path="res/parkour.mp4", cool_subtitles=False, export_name="output", background_video_change_frame_rate=8,bg_music=False):
         self.mp3 = mp3
+        self.background_music = bg_music
         self.background_video_frame_change_rate = background_video_change_frame_rate
         self.export_name = export_name
         self.video_path = video_path
@@ -82,6 +83,7 @@ class Video:
             video_full.close()
             return None
 
+        # Background video clips
         num_switches = int(np.ceil(audio_duration / self.background_video_frame_change_rate))
         subclips = []
 
@@ -96,6 +98,38 @@ class Video:
             ).resize((1080, 1920))
             subclip = subclip.set_start(i * self.background_video_frame_change_rate)
             subclips.append(subclip)
+
+        clip = CompositeVideoClip(subclips).set_duration(audio_duration)
+
+        final_audio = audio
+        if self.background_music==True:
+            bg_music = AudioFileClip("res/bgmusic.mp3").subclip(0, audio_duration)
+            final_audio = CompositeAudioClip([audio, bg_music.volumex(0.1)])
+
+        clip = clip.set_audio(final_audio)
+
+        # Subtitles
+        subtitles = self.generate_subtitles()
+        subtitle_clips = [self.create_subtitle_clip(sub["text"], sub["start"], sub["end"], clip.w) for sub in subtitles]
+
+        final_clip = CompositeVideoClip([clip, *subtitle_clips])
+
+        if not output_file:
+            output_file = f"{self.export_name}.mp4"
+
+        final_clip.write_videofile(output_file, codec="libx264", audio_codec="aac", fps=24)
+
+        # Close all resources
+        final_clip.close()
+        clip.close()
+        video_full.close()
+        audio.close()
+        if self.background_music:
+            bg_music.close()
+
+        print(f"Saved video to {output_file}")
+        return output_file
+
 
         clip = CompositeVideoClip(subclips).set_duration(audio_duration)
         clip = clip.set_audio(audio)
