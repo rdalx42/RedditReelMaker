@@ -16,6 +16,7 @@ class Api:
         self.ans = []
 
     def get_first_comment(self, post_id):
+        time.sleep(1)
         url = f"https://www.reddit.com/r/{self.subreddit}/comments/{post_id}.json"
         try:
             response = requests.get(url, headers=self.headers, timeout=5)
@@ -44,11 +45,7 @@ class Api:
                 return comment["data"].get("body")
         return None
 
-    def sanitize_comment(self, comment):
-        if isinstance(comment, list):
-            return [c.replace(".", "").replace(",", "") for c in comment]
-        else:
-            return comment.replace(".", "").replace(",", "")
+    
     def get_posts(self):
         
         after = None
@@ -129,7 +126,7 @@ class Api:
             word_count = len(pcomment.split())
             print(word_count)
             if word_count_min <= word_count <= word_count_max:
-                [pname, pcomment] = self.sanitize_comment([pname, pcomment])
+                
                 return [pname, pcomment]
 
             attempts += 1
