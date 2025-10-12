@@ -30,6 +30,7 @@ https://github.com/user-attachments/assets/4ddbc0a0-99bd-4e77-b460-b148df205f57
   - [X] Add background music  <br>
   - [X] Add more background videos
   - [ ] More scraping
+  - [ ] Add a voice toggle (male/female)
   - [X] Fix extra robotic text-to-speech   
 - [ ] Make a frontend (with flask) <br>
   - [X] Complete create page
