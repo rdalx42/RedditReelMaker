@@ -110,8 +110,19 @@
         
     </div>
 
-    
-    <script href = "../static/code/slideshow.js"></script>
+    <script>
+        const images = [
+            "{{ url_for('static', filename='images/display_init/image1.png') }}",
+            "{{ url_for('static', filename='images/display_init/image2.jpg') }}",
+            "{{ url_for('static', filename='images/display_init/image3.jpg') }}",
+            "{{ url_for('static', filename='images/display_init/image4.jpg') }}",
+            "{{ url_for('static', filename='images/display_init/image5.jpg') }}",
+            "{{ url_for('static', filename='images/display_init/image6.jpg') }}",
+            "{{ url_for('static', filename='images/display_init/image7.jpg') }}"
+        ];
+    </script>
+
+    <script src="{{ url_for('static', filename='code/slideshow.js') }}"></script>
 
 </body>
 </html>
