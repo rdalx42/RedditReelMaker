@@ -5,14 +5,6 @@ from pydub.effects import speedup
 
 class Sound:
     def __init__(self, content, output_file="output.mp3"):
-    
-        self.content = [c.replace(".", "").replace(",", "") for c in content]
-        if isinstance(content, list):
-            self.content = [c.replace(".", "").replace(",", "") for c in content]
-        else:
-            self.content = content.replace(".", "").replace(",", "")
-
-        print(content)
 
         self.content = content
         self.output_file = output_file
@@ -36,7 +28,7 @@ class Sound:
         female_audio = AudioSegment.from_file(female_file)
 
         male_audio = speedup(male_audio,1.1)
-        female_audio = speedup(female_audio,1.25)
+        female_audio = speedup(female_audio,1.1)
 
         # Concatenate without gaps
         combined = male_audio + female_audio
