@@ -87,9 +87,15 @@ def call_api_worker(task_id, params):
         tasks[task_id]["file"] = None
         tasks[task_id]["message"] = f"Error: {e}"
 
-@app.route("/")
+@app.route("/", methods = ["GET","POST"])
 def home():
-    return redirect(url_for("create"))
+
+
+    if request.method == "POST":
+        if "continue_in_app" in request.form: 
+            return redirect(url_for("create"))
+
+    return render_template("home.html",timestamp = int(time.time()))
 
 @app.route("/create", methods=["GET", "POST"])
 def create():
