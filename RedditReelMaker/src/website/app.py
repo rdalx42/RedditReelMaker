@@ -1,19 +1,22 @@
-from flask import Flask, render_template, request, url_for, redirect
-from rrm_api import Api, Sound, Video
-import re
-import time
+from flask import Flask, render_template, request, redirect, url_for, send_file
 import threading
 import traceback
+import time
+import re
+import uuid
+import random
+import os
+from rrm_api import Api, Sound, Video
 
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return redirect(url_for("create"))
+tasks = {}
 
-def call_api(params):
-
+def call_api_worker(task_id, params):
     try:
+        tasks[task_id]["status"] = "processing"
+        tasks[task_id]["message"] = "Initializing API..."
+
         nsfw = False
         coolsubs = False
         export_filename = "ONLINE_REEL_MAKER_OUTPUT"
@@ -50,19 +53,18 @@ def call_api(params):
                     l1, l2 = 50, 70
                 elif value == "Option 3":
                     l1, l2 = 140, 210
-            print(f"{key} = {value}")
 
-        print("initializing")
-        api = Api(l1, l2, "AskReddit",ans_path="C:/Users/raduh/OneDrive/Documents/RedditReelMaker/src/ans.json") # !!! TEMPORARY !!!
-        print(l1,l2)
-        print("initizalized")
+        tasks[task_id]["message"] = "Fetching Reddit post..."
+        api = Api(l1, l2, "AskReddit", ans_path="C:/Users/raduh/OneDrive/Documents/RedditReelMaker/src/ans.json")
         selected = api.get_post(l1, l2, nsfw=nsfw)
-        
-        print(selected)
-        print("Got post")
+        tasks[task_id]["message"] = "Generating voiceover..."
         api.sanitize_comment(selected)
         audio_path = Sound(selected).do()
-        print("Made sound")
+
+        rand_str = f'{random.getrandbits(128):032x}'
+        export_filename += rand_str
+
+        tasks[task_id]["message"] = "Initializing video..."
         video = Video(
             audio_path,
             cool_subtitles=coolsubs,
@@ -70,14 +72,20 @@ def call_api(params):
             export_name=export_filename,
             background_video_change_frame_rate=change
         )
-        print("Made video")
+        tasks[task_id]["message"] = "Downloading will begin shortly (1-3 minutes)"
         output_file = video.do()
-        print("Saved video at:", output_file)
-        return output_file
-
+        tasks[task_id]["status"] = "done"
+        tasks[task_id]["file"] = output_file
+        tasks[task_id]["message"] = "Video generated successfully ✅"
     except Exception as e:
-        print("Error in call_api:", e)
         traceback.print_exc()
+        tasks[task_id]["status"] = "error"
+        tasks[task_id]["file"] = None
+        tasks[task_id]["message"] = f"Error: {e}"
+
+@app.route("/")
+def home():
+    return redirect(url_for("create"))
 
 @app.route("/create", methods=["GET", "POST"])
 def create():
@@ -98,21 +106,49 @@ def create():
                 post_data[key] = value
             post_data["flag_choice_nsfw"] = request.form.get("flag_choice_nsfw")
             post_data["flag_choice_subtitles"] = request.form.get("flag_choice_subtitles")
+
             if can_call_api:
                 try:
-                    threading.Thread(target=call_api, args=(post_data,)).start()
-                    return redirect(url_for("loading"))
+                    task_id = str(uuid.uuid4())
+                    tasks[task_id] = {"status": "processing", "file": None, "message": "Queued for generation..."}
+                    threading.Thread(target=call_api_worker, args=(task_id, post_data), daemon=True).start()
+                    return redirect(url_for("loading", task_id=task_id))
                 except Exception as e:
                     err_msg = f"Error: {e}"
                     traceback.print_exc()
             else:
-                if err_msg is None:
+                if not err_msg:
                     err_msg = "Expected all content to be filled!"
     return render_template("create.html", timestamp=int(time.time()), error_msg=err_msg)
 
 @app.route("/loading")
 def loading():
-    return render_template("loading.html")
+    task_id = request.args.get("task_id")
+    if not task_id or task_id not in tasks:
+        return redirect(url_for("create"))
+
+    task = tasks[task_id]
+
+    if task["status"] == "done":
+        return redirect(url_for("download_video", filename=os.path.basename(task["file"])))
+    elif task["status"] == "error":
+        return f"<h2>Error occurred: {task['message']}</h2>"
+
+    return render_template(
+        "loading.html",
+        timestamp=int(time.time()),
+        status=task["status"],
+        message=task["message"],
+        task_id=task_id
+    )
+
+@app.route("/download/<filename>")
+def download_video(filename):
+    file_path = os.path.join(os.getcwd(), filename)
+    if os.path.exists(file_path):
+        return send_file(file_path, as_attachment=True)
+    else:
+        return "File not found", 404
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    app.run(debug=True, use_reloader=False, threaded=True)
