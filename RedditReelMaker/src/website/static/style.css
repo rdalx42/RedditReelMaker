@@ -89,43 +89,159 @@ input[type="radio"]:checked::after {
     border-radius: 8px;               /* optional */
     z-index: 100;
 }
+/* Hero Section Container */
+.hero_page {
+    display: flex;
+    align-items: stretch;           /* make children same height */
+    justify-content: flex-start;    /* left-aligned layout */
+    gap: 20px;                      /* spacing between video and info box */
+    width: 80vw;
+    max-width: 1200px;
+    height: 60vh;                   /* visible height */
+    margin: 100px auto;             /* center horizontally */
+    z-index: 5;
+    position: relative;
+    flex-wrap: wrap;                /* optional for very small screens */
+}
 
+/* Hero Video */
+.hero_video {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;              /* scale & crop nicely */
+    border-radius: 15px;
+}
 
-/* Optional: add a top margin to the content below so it’s not hidden */
+/* Hero Info Box */
+.hero_info_box {
+    flex: 1;                        /* same width as video */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;        /* vertical alignment */
+    align-items: center;            /* horizontal alignment */
+    padding: 30px;
+    border-radius: 15px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.95); /* semi-transparent black */
+    font-size: clamp(1rem, 1.5vw, 1.5rem);
+    text-align: center;
+    height: 100%;                   /* match video height */
+    box-sizing: border-box;         /* include padding inside height */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    animation: pulse 2s infinite ease-in-out; /* subtle pulse effect */
+}
+
+/* Headings inside hero_info_box */
+.hero_info_box h2 {
+    font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.hero_info_box h2 i {
+    color: #ffcc00;                 /* highlight italic text */
+}
+
+.hero_info_box h3 {
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-weight: normal;
+    margin-bottom: 30px;
+}
+
+/* Continue Button */
+.continue_button {
+    background-color: #007BFF;
+    color: white;
+    font-size: 1rem;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+.continue_button:hover {
+    transform: scale(1.05);
+}
+
+/* Arrow effect on hover */
+.continue_button::after {
+    content: '→';
+    position: absolute;
+    right: -25px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s, right 0.3s;
+}
+
+.continue_button:hover::after {
+    opacity: 1;
+    right: -15px;   /* arrow slides slightly outward */
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive for small screens */
+@media (max-width: 900px) {
+    .hero_page {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .hero_video, .hero_info_box {
+        width: 100%;
+        height: 50vh;
+    }
+
+    .hero_info_box {
+        padding: 20px;
+    }
+}
+
 .complete_form {
     margin-top: clamp(20px, 10vh, 30px); /* space below the title */
 }
-
 .generate {
-    position: relative;       
-    display: block;           
-    margin: 20px auto 0 auto; 
-    width: 70%;
-    max-width: 200px;
-    height: 40px;
-    outline: none;
-    background-color: #ffffff; /* initial white background */
-    color: #000;               /* initial black text */
-    border: 2px solid #000;    /* optional border for better contrast */
-    border-radius: 10px;
+    background-color: #007BFF;  /* blue button */
+    color: white;
     font-size: 1rem;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
-    z-index: 10;
-    transition: all 0.3s ease-in-out; /* smooth color & background transition */
+    position: relative;
+    transition: all 0.3s ease-in-out;
 }
 
-/* Hover: fill black, text white */
 .generate:hover {
-    background-color: #000;
-    color: #ffffff;
-    transform: scale(1.05); /* optional pop effect */
+    transform: scale(1.05);
 }
 
-/* Active: pressed effect */
-.generate:active {
-    transform: scale(0.95); /* button compress on click */
+.generate::after {
+    content: '→';
+    position: absolute;
+    right: -25px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s, right 0.3s;
 }
+
+.generate:active::after {
+    opacity: 1;
+    right: -15px;
+}
+
 
 input[type="radio"]:checked::after {
     transform: scale(1); /* scale up when checked */
