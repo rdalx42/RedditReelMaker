@@ -1,6 +1,6 @@
 # RedditReelMaker
 
->Still work in progress
+>Still work in progress... probably gonna end up as a school project
 
 
 Current state of output:
